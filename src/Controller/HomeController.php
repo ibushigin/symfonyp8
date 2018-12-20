@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class HomeController extends AbstractController{
   /**
   *Grace aux annotations, je peux peux déclarer ma route
-  *@Route ("/bonjour")
+  *@Route ("/bonjour", name="bonjour")
   *
   */
  public function bonjour(){
@@ -29,7 +29,7 @@ class HomeController extends AbstractController{
 
  /**
  *Grace aux annotations, je peux peux déclarer ma route
- *@Route ("/", name="Home")
+ *@Route ("/", name="home")
  *
  */
  public function home(){
@@ -38,7 +38,7 @@ class HomeController extends AbstractController{
  }
 
 /**
- *@Route ("/exercice2/heure")
+ *@Route ("/exercice2/heure", name="heure")
  */
 public function heure(){
     $date = date("Y-m-d");
@@ -55,5 +55,13 @@ public function heure(){
 public function redirectHome(){
     //Pour faire une redirect en param le nom de la route vers laquelle on veut rediriger
     return $this->redirectToRoute('home');
+}
+
+    /**
+     * @Route("/exercice3/{age}/{nom}", name="exo3", requirements={"nom"="[a-zA-Z]+", "age"="[0-9]+"})
+     */
+
+public function exo3($age, $nom){
+    return $this->render('exercice3.html.twig', array('nom'=>$nom, 'age'=>$age));
 }
 }
