@@ -67,7 +67,28 @@ class ArticleController extends AbstractController
     public function showRecent(){
         $repository = $this->getDoctrine()->getRepository(Article::class);
         $articles = $repository->findAllPostedAfter("2000-01-01");
-        return $this->render('article/recent.html.twig', ['articles' => $articles]);
+
+        $articles2 = $repository->findAllPostedAfterSansLesMains("2000-01-01");
+        return $this->render('article/recent.html.twig', ['articles' => $articles, 'articles2' => $articles2]);
+    }
+    /**
+     * @Route("article/update/{id}", name="updateArticle", requirements={"id"="\d+"})
+     */
+
+    public function updateArticle($id){
+        $repository = $this->getDoctrine()->getRepository(Article::class);
+        $article = $repository->find($id);
+        if(!$article){
+            throw $this->createNotFoundException('no article found');
+        }
+            $article->setContent('contenu modifié');
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+
+            $this->addFlash('success', 'article modifié');
+
+            return $this->redirectToRoute('articleID', ['id' => $article->getId()]);
+
     }
 
 

@@ -59,4 +59,13 @@ class ArticleRepository extends ServiceEntityRepository
         $select->execute();
         return $select->fetchAll();
     }
+    //même chose mais en objet
+    public function findAllPostedAfterSansLesMains($datePost){
+        $queryBuilder = $this->createQueryBuilder('a')
+            ->andWhere('a.date_publi > :datepost')
+            ->setParameter('datePost', $datePost)
+            ->orderBy('a.date_publi', 'DESC')
+            ->getQuery();
+        return $queryBuilder->execute();
+    }
 }
