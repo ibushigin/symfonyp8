@@ -61,4 +61,14 @@ class ArticleController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route ("/article/recent", name="showRecentArticles")
+     */
+    public function showRecent(){
+        $repository = $this->getDoctrine()->getRepository(Article::class);
+        $articles = $repository->findAllPostedAfter("2000-01-01");
+        return $this->render('article/recent.html.twig', ['articles' => $articles]);
+    }
+
+
 }

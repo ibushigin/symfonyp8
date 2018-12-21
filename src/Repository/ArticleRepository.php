@@ -47,4 +47,16 @@ class ArticleRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findAllPostedAfter($datePost){
+        $connexion = $this->getEntityManager()->getConnection();
+        $sql= '
+            SELECT * FROM article 
+            WHERE date_publi > :datePost 
+            ORDER BY date_publi DESC
+            ';
+        $select = $connexion->prepare($sql);
+        $select -> bindValue(':datePost', $datePost);
+        $select->execute();
+        return $select->fetchAll();
+    }
 }
