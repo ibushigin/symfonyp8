@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block title %}Nous sommes le {{ date }}.{% endblock %}
 {% block body %}
+    {{ include('inc/bonjour.html.twig') }}
     <p>Nous sommes le {{ date }}, il est {{ hour }}.</p>
+
 {% endblock %}

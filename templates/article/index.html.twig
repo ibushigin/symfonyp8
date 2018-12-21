@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des articles{% endblock %}
+
+{% block body %}
+    {% for article in articles %}
+        <article>
+            <h1>{{ article.title }}</h1>
+            <p>{{ article.content }}</p>
+            <p>publié le {{ article.datepubli|date('d/m/Y') }} à {{ article.datepubli|date('H') }} h. <a href="{{ path('articleID', {id: article.id})}}">détail</a></p>
+        </article>
+    {% endfor %}
+{% endblock %}
