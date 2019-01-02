@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+{% block title %}Liste des cinq dernières catégories{% endblock %}
+{% block body %}
+    {%  for categorie in categories %}
+        <article>
+            <h3>{{  categorie.libelle }}</h3>
+            <p>{{ categorie.description }}</p>
+
+        </article>
+    {% endfor %}
+{% endblock %}
