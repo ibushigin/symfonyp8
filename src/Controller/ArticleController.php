@@ -90,6 +90,22 @@ class ArticleController extends AbstractController
             return $this->redirectToRoute('articleID', ['id' => $article->getId()]);
 
     }
+    /**
+     * @Route("/article/delete/{id}", name="deleteArticle", requirements={"id"="\d+"})
+     */
+
+    public function deleteArticle(Article $article){
+        //Récupération de l'entity manager nécessaire pour la suppression
+        $entityManager = $this->getDoctrine()->getManager();
+        //je veux supprimer cet article
+        $entityManager->remove($article);
+        //pour valider la suppression
+        $entityManager->flush();
+        //génération d'un message flash
+        $this->addFlash('warning', 'Article supprimé');
+        //redirection vers la liste des articles
+        return $this->redirectToRoute('articles');
+    }
 
 
 }

@@ -3,11 +3,20 @@
 {% block title %}Liste des articles{% endblock %}
 
 {% block body %}
+
+    {#Affichage des msgs flash#}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+
+
     {% for article in articles %}
         <article>
             <h1>{{ article.title }}</h1>
             <p>{{ article.content }}</p>
-            <p>publié le {{ article.datepubli|date('d/m/Y') }} à {{ article.datepubli|date('H') }} h. <a href="{{ path('articleID', {id: article.id})}}">détail</a></p>
+            <p>publié le {{ article.datepubli|date('d/m/Y') }} à {{ article.datepubli|date('H') }} h. <a href="{{ path('articleID', {id: article.id})}}">détail</a> | <a href="{{ path('updateArticle', {id: article.id})}}">modifier</a> | <a href="{{ path('deleteArticle', {id: article.id})}}">supprimer</a></p>
         </article>
     {% endfor %}
 {% endblock %}
