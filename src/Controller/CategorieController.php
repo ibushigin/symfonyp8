@@ -3,7 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Categorie;
+use App\Form\CategorieType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CategorieController extends AbstractController
@@ -20,17 +25,31 @@ class CategorieController extends AbstractController
     /**
      * @Route("/categorie/add", name="addCategorie")
      */
-    public function addCategorie(){
+    //$request contient toutes les infos sur la requête http dont GET et POST
+    public function addCategorie(Request $request){
         $entityManager = $this->getDoctrine()->getManager();
         $categorie = new Categorie();
-        $categorie->setLibelle('astronomie');
-        $categorie->setDescription('Article parlant d\'astronomie');
-        $categorie->setDateCreation(new \DateTime(date('Y-m-d')));
 
-        $entityManager->persist($categorie);
-        $entityManager->flush();
 
-        return $this->render('categorie/add.html.twig');
+        $form = $this->createForm(CategorieType::class);
+
+        //je demande au form de gérer la requête
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            //le form a été soumis et validé
+            //je crée un obj categorie à partir des données envoyées
+            $categorie = $form->getData();
+            $categorie->setDateCreation(new \DateTime(date('Y-m-d H:i:s')));
+
+            $entityManager->persist($categorie);
+            $entityManager->flush();
+            $this->addFlash('success', 'catégorie ajoutée');
+            return $this->redirectToRoute('categorie');
+        }
+
+
+
+        return $this->render('categorie/add.html.twig', ['form' => $form->createView()]);
 
 
     }
@@ -60,7 +79,7 @@ class CategorieController extends AbstractController
         ]);
     }
     /**
-     * @Route("categorie/update/{id}", name="categorieArticle", requirements={"id"="\d+"})
+     * @Route("categorie/update/{id}", name="updateCategorie", requirements={"id"="\d+"})
      */
 
     public function updateCategorie($id){

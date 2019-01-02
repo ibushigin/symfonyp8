@@ -50,7 +50,7 @@ class CategorieRepository extends ServiceEntityRepository
     public function findLastFive(){
         $queryBuilder = $this->createQueryBuilder('c')
             ->orderBy('c.date_creation', 'DESC')
-            ->setMaxResults('5')
+            ->setMaxResults(5)
             ->getQuery();
         return $queryBuilder->execute();
 
