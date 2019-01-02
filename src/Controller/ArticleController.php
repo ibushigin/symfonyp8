@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Form\ArticleType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
@@ -25,22 +27,23 @@ class ArticleController extends AbstractController
     /**
      * @Route("/article/add", name="addArticle")
      */
-    public function addArticle(){
+    public function addArticle(Request $request){
         //pour pouvoir sauvegarder un objet, on utilise l'entity manager
         $entityManager = $this->getDoctrine()->getManager();
         //on crée notre objet article en dur pour l'instant
         $article = new Article();
-        $article->setTitle('Mon premier article');
-        $article->setContent('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.');
-        $article->setDatePubli(new \DateTime(date('Y-m-d H:i:s')));
-        $article->setAuthor('Jean Lalanne');
 
-        //Pour indiquer à doctrine de conserver l'obj, on doit le persister.
-        $entityManager->persist($article);
-        //Pour exécuter les requêtes sql
-        $entityManager->flush();
+        $form = $this->createForm(ArticleType::class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $article = $form->getData();
+            $entityManager->persist($article);
+            $entityManager->flush();
+            $this->addFlash('success', 'article ajouté!');
+            return $this->redirectToRoute('articles');
+        }
 
-        return $this->render('article/add.html.twig');
+        return $this->render('article/add.html.twig', ['form' => $form->createView()]);
 
     }
     /**
@@ -75,21 +78,27 @@ class ArticleController extends AbstractController
      * @Route("article/update/{id}", name="updateArticle", requirements={"id"="\d+"})
      */
 
-    public function updateArticle($id){
-        $repository = $this->getDoctrine()->getRepository(Article::class);
-        $article = $repository->find($id);
-        if(!$article){
-            throw $this->createNotFoundException('no article found');
-        }
-            $article->setContent('contenu modifié');
-            $entityManager = $this->getDoctrine()->getManager();
+
+    public function updateArticle(Request $request, Article $article){
+        //récupération du manager
+        $entityManager = $this->getDoctrine()->getManager();
+
+        //je crée mon formulaire, je lui passe en second paramètre mon objet catégorie afin qu'il pré-remplisse le formulaire
+        $form = $this->createForm(ArticleType::class, $article);
+        //je lui donne la requête
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            //si le formulaire a été envoyé et validé
+            //on récupère l'objet catégorie
+            $article = $form->getData();
+            //enregistrement dans la base
             $entityManager->flush();
-
             $this->addFlash('success', 'article modifié');
-
-            return $this->redirectToRoute('articleID', ['id' => $article->getId()]);
-
+            return $this->redirectToRoute('articles');
+        }
+        return $this->render('article/add.html.twig', ['form' => $form->createView()]);
     }
+
     /**
      * @Route("/article/delete/{id}", name="deleteArticle", requirements={"id"="\d+"})
      */

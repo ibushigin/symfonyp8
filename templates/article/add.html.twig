@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block title %}Ajout d'article{% endblock %}
 {% block body %}
-    <p>Article ajouté!</p>
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+    {{ form_end(form) }}
 {% endblock %}

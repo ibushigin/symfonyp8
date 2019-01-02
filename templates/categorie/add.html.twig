@@ -2,6 +2,16 @@
 {% block title %}Ajout de catégorie{% endblock %}
 {% block body %}
     {{ form_start(form) }}
+        {# widget génére tous les champs
         {{ form_widget(form) }}
+        #}
+        {# custom form#}
+        {{  form_label(form.libelle, 'Libellé top', {'label_attr' : {'class' : 'ma-classe'}}) }}
+        {{ form_errors(form.libelle) }}
+        {{ form_widget(form.libelle, {'attr': { 'class': 'form-control-lg', 'placeholder': 'libelle intéressant svp'}}) }}
+        <div class="autre-classe">
+            {{ form_row(form.description, {'label' : 'Soyez inventif svp', 'attr' : {'class' : 'form-control-lg', 'placeholder' : 'ok'}}) }}
+        </div>
+
     {{ form_end(form) }}
 {% endblock %}
