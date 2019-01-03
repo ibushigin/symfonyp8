@@ -38,7 +38,7 @@ class Message
 
     /**
      * @ORM\Column(type="datetime")
-     * @Assert\NotBlank
+     *
      */
     private $dateenvoi;
 
