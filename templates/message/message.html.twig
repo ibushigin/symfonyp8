@@ -1,5 +1,5 @@
 {% extends 'base.html.twig' %}
-{% block title %}Nouveau Message{% endblock %}
+{% block title %}Message {{ message.sujet }}{% endblock %}
 {% block body %}
     <h2>{{ message.sujet }}</h2>
     <p><strong>envoyé le {{ message.dateenvoi|date('d/m/y') }} par {{ message.nom }}.</strong></p>
