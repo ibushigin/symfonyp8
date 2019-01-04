@@ -3,10 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
 class User implements UserInterface
 {
@@ -32,6 +34,11 @@ class User implements UserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+    // On crée une nouvelle propriété qui va stocker le mdp en clair
+
+
+    private $plainPassword;
+
 
     /**
      * @ORM\Column(type="string", length=30)
@@ -62,7 +69,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->username;
     }
 
     /**
@@ -113,12 +120,23 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+       $this->plainPassword = null;
     }
 
     public function setUsername(string $username): self
     {
         $this->username = $username;
+
+        return $this;
+    }
+    public function getPlainPassword(): string
+    {
+        return (string) $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
 
         return $this;
     }

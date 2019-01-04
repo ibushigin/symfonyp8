@@ -23,7 +23,7 @@ class AppFixtures extends Fixture
     {
         // $product = new Product();
         // $manager->persist($product);
-        for($i=1; $i<= 20; $i++){
+        for($i=1; $i<= 50; $i++){
             //génération aléatoire de date
             $timestamp = mt_rand(1, time());
             $randomDate = date('Y-m-d H:i:s', $timestamp);
@@ -33,10 +33,15 @@ class AppFixtures extends Fixture
             $content = simplexml_load_file('http://www.lipsum.com/feed/xml?amount=1&what=paras&start=0')->lipsum;
 
             $user = new User();
+            if($i===1){
+                $roles = ['ROLE_ADMIN', 'ROLE_USER'];
+            }else{
+                $roles = ['ROLE_USER'];
+            }
             $user->setUsername('user' .$i);
             $user->setEmail('user'.$i.'@gmail.com');
-            $user->setRoles(['ROLE_USER']);
-            $plainPwd = 'toto';
+            $user->setRoles($roles);
+            $plainPwd = 'mdp';
             $mdpEncoded = $this->encoder->encodePassword($user, $plainPwd);
             $user->setPassword($mdpEncoded);
 

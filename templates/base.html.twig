@@ -21,6 +21,19 @@
                 <a class="nav-item nav-link" href="{{ path('bonjourNom', {nom: 'toto'}) }}">Bonjour Toto</a>
                 <a class="nav-item nav-link" href="{{ path('heure') }}">Heure</a>
                 <a class="nav-item nav-link" href="{{ path('exo3', {nom:'Toto', age:'33'}) }}">Toto 33 ans</a>
+             {% if is_granted('ROLE_ADMIN') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('admin') }}">Admin</a>
+                </li>
+              {% endif %}
+
+                <li class="nav-item">
+                    {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                        <a href="{{ path('app_login') }}" class="nav-link">login</a>
+                    {% else %}
+                    <a class="nav-link" href="{{  path('logout') }}">logout</a>
+                    {% endif %}
+                </li>
             </div>
         </div>
     </nav>

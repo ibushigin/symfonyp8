@@ -38,9 +38,9 @@ class Article
     private $date_publi;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
      */
-    private $author;
+    private $user;
 
     public function getId(): ?int
     {
@@ -83,14 +83,14 @@ class Article
         return $this;
     }
 
-    public function getAuthor(): ?string
+    public function getUser(): ?User
     {
-        return $this->author;
+        return $this->user;
     }
 
-    public function setAuthor(string $author): self
+    public function setUser(User $user): self
     {
-        $this->author = $author;
+        $this->user = $user;
 
         return $this;
     }
